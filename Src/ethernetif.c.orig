@@ -103,6 +103,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     PA7     ------> ETH_CRS_DV
     PC4     ------> ETH_RXD0
     PC5     ------> ETH_RXD1
+    PB10     ------> ETH_RX_ER
     PB11     ------> ETH_TX_EN
     PB12     ------> ETH_TXD0
     PB13     ------> ETH_TXD1 
@@ -121,7 +122,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
+    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -154,6 +155,7 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     PA7     ------> ETH_CRS_DV
     PC4     ------> ETH_RXD0
     PC5     ------> ETH_RXD1
+    PB10     ------> ETH_RX_ER
     PB11     ------> ETH_TX_EN
     PB12     ------> ETH_TXD0
     PB13     ------> ETH_TXD1 
@@ -162,7 +164,7 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
 
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_7);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13);
 
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(ETH_IRQn);
@@ -207,9 +209,9 @@ static void low_level_init(struct netif *netif)
   heth.Instance = ETH;
   heth.Init.AutoNegotiation = ETH_AUTONEGOTIATION_ENABLE;
   heth.Init.PhyAddress = PHY_USER_NAME_PHY_ADDRESS;
-  MACAddr[0] = 0x00;
-  MACAddr[1] = 0x80;
-  MACAddr[2] = 0xE1;
+  MACAddr[0] = 0x02;
+  MACAddr[1] = 0x00;
+  MACAddr[2] = 0x00;
   MACAddr[3] = 0x00;
   MACAddr[4] = 0x00;
   MACAddr[5] = 0x00;
@@ -219,11 +221,11 @@ static void low_level_init(struct netif *netif)
   heth.Init.MediaInterface = ETH_MEDIA_INTERFACE_RMII;
 
   /* USER CODE BEGIN MACADDRESS */
-    /*Ð¾Æ¬¸´Î»*/
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);
-    HAL_Delay(55);
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
-    HAL_Delay(55);
+  /*Ð¾Æ¬¸´Î»*/
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET); 
+  HAL_Delay(55);
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
+  HAL_Delay(55);
   /* USER CODE END MACADDRESS */
 
   hal_eth_init_status = HAL_ETH_Init(&heth);
@@ -274,18 +276,18 @@ static void low_level_init(struct netif *netif)
   HAL_ETH_Start(&heth);
 
 /* USER CODE BEGIN PHY_PRE_CONFIG */ 
-
+    
 /* USER CODE END PHY_PRE_CONFIG */
   
 
 /* USER CODE BEGIN PHY_POST_CONFIG */ 
-
+    
 /* USER CODE END PHY_POST_CONFIG */
 
 #endif /* LWIP_ARP || LWIP_ETHERNET */
 
 /* USER CODE BEGIN LOW_LEVEL_INIT */ 
-
+    
 /* USER CODE END LOW_LEVEL_INIT */
 }
 
@@ -515,7 +517,7 @@ static err_t low_level_output_arp_off(struct netif *netif, struct pbuf *q, const
   errval = ERR_OK;
     
 /* USER CODE BEGIN 5 */ 
-
+    
 /* USER CODE END 5 */  
     
   return errval;
@@ -584,7 +586,7 @@ err_t ethernetif_init(struct netif *netif)
 */
 u32_t sys_jiffies(void)
 {
-    return HAL_GetTick();
+  return HAL_GetTick();
 }
 
 /**
@@ -595,44 +597,10 @@ u32_t sys_jiffies(void)
 */
 u32_t sys_now(void)
 {
-    return HAL_GetTick();
+  return HAL_GetTick();
 }
 
 /* USER CODE END 6 */
-
-/**
-  * @brief  This function sets the netif link status.
-  * @param  netif: the network interface
-  * @retval None
-  */  
-void ethernetif_set_link(void const *argument)
-{
-  uint32_t regvalue = 0;
-  struct link_str *link_arg = (struct link_str *)argument;
-  
-  for(;;)
-  {
-    /* Read PHY_BSR*/
-    HAL_ETH_ReadPHYRegister(&heth, PHY_BSR, &regvalue);
-    
-    regvalue &= PHY_LINKED_STATUS;
-    
-    /* Check whether the netif link down and the PHY link is up */
-    if(!netif_is_link_up(link_arg->netif) && (regvalue))
-    {
-      /* network cable is connected */ 
-      netif_set_link_up(link_arg->netif);        
-    }
-    else if(netif_is_link_up(link_arg->netif) && (!regvalue))
-    {
-      /* network cable is dis-connected */
-      netif_set_link_down(link_arg->netif);
-    }
-    
-    /* Suspend thread for 200 ms */
-    osDelay(200);
-  }
-}
 
 /* USER CODE BEGIN 7 */
 
@@ -735,15 +703,15 @@ void ethernetif_update_config(struct netif *netif)
   */
 __weak void ethernetif_notify_conn_changed(struct netif *netif)
 {
-    /* NOTE : This is function could be implemented in user file
-              when the callback is needed,
-    */
-    if(netif_is_link_up(netif) && !netif_is_up(netif))
-    {
-        netif_set_up(netif);
-        extern err_t dhcp_start(struct netif *netif);
-        dhcp_start(netif);
-    }
+  /* NOTE : This is function could be implemented in user file 
+            when the callback is needed,
+  */
+  if(netif_is_link_up(netif) && !netif_is_up(netif))
+  {
+     netif_set_up(netif);
+     extern err_t dhcp_start(struct netif *netif);
+     dhcp_start(netif);
+  }
 }
 /* USER CODE END 8 */ 
 #endif /* LWIP_NETIF_LINK_CALLBACK */

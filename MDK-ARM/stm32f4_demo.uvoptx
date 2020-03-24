@@ -145,14 +145,14 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>d</Name>
+          <Name></Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint>
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>115</LineNumber>
+          <LineNumber>141</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -168,7 +168,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>110</LineNumber>
+          <LineNumber>138</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -184,25 +184,25 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>128</LineNumber>
+          <LineNumber>519</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134226776</Address>
+          <Address>134236200</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Src/lwip.c</Filename>
+          <Filename>../Middlewares/Third_Party/LwIP/src/core/ipv4/dhcp.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\stm32f4_demo\../Src/lwip.c\128</Expression>
+          <Expression>\\stm32f4_demo\../Middlewares/Third_Party/LwIP/src/core/ipv4/dhcp.c\519</Expression>
         </Bp>
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>138</LineNumber>
+          <LineNumber>129</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134226810</Address>
+          <Address>134226242</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -211,7 +211,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Src/lwip.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\stm32f4_demo\../Src/lwip.c\138</Expression>
+          <Expression>\\stm32f4_demo\../Src/lwip.c\129</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>111</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134226192</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Src/lwip.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\stm32f4_demo\../Src/lwip.c\111</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -219,6 +235,16 @@
           <count>0</count>
           <WinNumber>1</WinNumber>
           <ItemText>num_cnt</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>gnetif</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>dhcp</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -268,7 +294,7 @@
         <EnableFlashSeq>1</EnableFlashSeq>
         <EnableLog>0</EnableLog>
         <Protocol>2</Protocol>
-        <DbgClock>10000000</DbgClock>
+        <DbgClock>5000000</DbgClock>
       </DebugDescription>
     </TargetOption>
   </Target>
@@ -683,7 +709,7 @@
 
   <Group>
     <GroupName>Drivers/CMSIS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

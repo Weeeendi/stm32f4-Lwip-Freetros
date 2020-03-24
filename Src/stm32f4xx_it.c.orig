@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+ 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -256,13 +256,13 @@ void DMA2_Stream2_IRQHandler(void)
 void ETH_IRQHandler(void)
 {
   /* USER CODE BEGIN ETH_IRQn 0 */
-    uint32_t ulReturn;
-    ulReturn = taskENTER_CRITICAL_FROM_ISR();
+  uint32_t ulReturn;
+  ulReturn = taskENTER_CRITICAL_FROM_ISR();
   /* USER CODE END ETH_IRQn 0 */
   HAL_ETH_IRQHandler(&heth);
   /* USER CODE BEGIN ETH_IRQn 1 */
-    //退出临界段
-    taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+  //退出临界段
+  taskEXIT_CRITICAL_FROM_ISR(ulReturn);
   /* USER CODE END ETH_IRQn 1 */
 }
 
